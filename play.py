@@ -5,18 +5,33 @@ from cube import Cube, rotate_cube_face
 from util import SqMatrix
 
 
-def rotate_face(cube, xs):
-    for x in xs:
-        rotate_cube_face(cube, x)
+def order_of_face_operation(op):
+    c, d = rcube(), rcube()
 
-    display(cube)
+    i = 1
+    apply_face_operation(c, op)
+    while c != d:
+        i += 1
+        apply_face_operation(c, op)
+
+    print("order of face operation: ", op, " is ", i)
+
+
+def repeat_face_operation(cube, op, n):
+    for _ in range(n):
+        apply_face_operation(cube, op)
+
+
+def apply_face_operation(cube, op):
+    for r in op:
+        rotate_cube_face(cube, r)
 
 
 def rcube():
     return Cube()
 
 
-def display(cube):
+def display_cube(cube):
     def rrotate(mat):
         mat.rotate
         mat.rotate
@@ -64,5 +79,4 @@ def zip_to_list(zs):
     xs = []
     for a, b, c, d, e in zs:
         xs += [a + b + c + d + e]
-
     return xs
