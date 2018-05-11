@@ -2,7 +2,6 @@
 
 
 from cube import Cube, rotate_cube_face
-
 from util import SqMatrix
 
 
@@ -67,30 +66,3 @@ def zip_to_list(zs):
         xs += [a + b + c + d + e]
 
     return xs
-
-
-def test_cube():
-    fss = [["F00", "F01", "F02"],
-           ["F10", "F11", "F12"],
-           ["F20", "F21", "F22"]]
-
-    bs = ["B" + x[1:] for xs in fss for x in xs]
-    bss = [bs[:3], bs[3:6], bs[6:]]
-
-    ls = ["L" + x[1:] for xs in fss for x in xs]
-    lss = [ls[:3], ls[3:6], ls[6:]]
-
-    rs = ["R" + x[1:] for xs in fss for x in xs]
-    rss = [rs[:3], rs[3:6], rs[6:]]
-
-    us = ["U" + x[1:] for xs in fss for x in xs]
-    uss = [us[:3], us[3:6], us[6:]]
-
-    ds = ["D" + x[1:] for xs in fss for x in xs]
-    dss = [ds[:3], ds[3:6], ds[6:]]
-
-    xss = [fss, bss, lss, rss, uss, dss]
-    c = Cube(xss)
-
-    display(c)
-    return c
