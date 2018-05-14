@@ -11,52 +11,25 @@ class Cube:
         A cube is a map from direction to a SqMatrix.
         fs must be list of cube faces in the order
         [F, B, L, R, U, D]
-
-        >>> c = Cube()
-        >>> wss = [['W', 'W', 'W'] for _ in range(3)]
-        >>> fs = SqMatrix(wss)
-        >>> c._cube['F'] == fs
-        True
-
-        >>> yss = [['Y', 'Y', 'Y'] for _ in range(3)]
-        >>> ys = SqMatrix(yss)
-        >>> c._cube['B'] == ys
-        True
-
-
-        >>> lss = [['G', 'G', 'G'] for _ in range(3)]
-        >>> ls = SqMatrix(lss)
-        >>> c._cube['L'] == ls
-        True
-
-
-        >>> rss = [['B', 'B', 'B'] for _ in range(3)]
-        >>> rs = SqMatrix(rss)
-        >>> c._cube['R'] == rs
-        True
-
-        >>> uss = [['O', 'O', 'O'] for _ in range(3)]
-        >>> us = SqMatrix(uss)
-        >>> c._cube['U'] == us
-        True
-
-        >>> dss = [['R', 'R', 'R'] for _ in range(3)]
-        >>> ds = SqMatrix(dss)
-        >>> c._cube['D'] == ds
-        True
         """
         if fs:
             zs = zip("FBLRUD", fs)
             self._cube = {f: SqMatrix(xs) for f, xs in zs}
         else:
             self._cube = {
-                "F": Cube._newMatrix("W"),
-                "B": Cube._newMatrix("Y"),
+                "F": Cube._newMatrix("R"),
+                "B": Cube._newMatrix("O"),
                 "L": Cube._newMatrix("G"),
                 "R": Cube._newMatrix("B"),
-                "U": Cube._newMatrix("O"),
-                "D": Cube._newMatrix("R"),
+                "U": Cube._newMatrix("W"),
+                "D": Cube._newMatrix("Y"),
             }
+
+        self._rotations = []
+
+    @property
+    def rotations(self):
+        return self._rotations[::]
 
     @property
     def faces(self):
@@ -80,7 +53,7 @@ class Cube:
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):
-            return self.__dict__ == other.__dict__
+            return self._cube == other._cube
         else:
             return False
 
@@ -199,6 +172,7 @@ def rotate_cube_face(cube, direction):
 
             _rotate_face_slice(cube, order, ss, d)
             cube._cube["U"].rotate
+            cube._rotations.append("U")
 
         elif direction == "D":
             order = "FRBL"
@@ -209,6 +183,7 @@ def rotate_cube_face(cube, direction):
 
             _rotate_face_slice(cube, order, ss, d)
             cube._cube["D"].rotate
+            cube._rotations.append("D")
 
         elif direction == "L":
             order = "FDBU"
@@ -227,6 +202,7 @@ def rotate_cube_face(cube, direction):
 
             _rotate_face_slice(cube, order, ss, d)
             cube._cube["L"].rotate
+            cube._rotations.append("L")
 
         elif direction == "R":
             order = "FUBD"
@@ -245,6 +221,7 @@ def rotate_cube_face(cube, direction):
 
             _rotate_face_slice(cube, order, ss, d)
             cube._cube["R"].rotate
+            cube._rotations.append("R")
 
         elif direction == "F":
             order = "URDL"
@@ -263,6 +240,7 @@ def rotate_cube_face(cube, direction):
 
             _rotate_face_slice(cube, order, ss, d)
             cube._cube["F"].rotate
+            cube._rotations.append("F")
 
         elif direction == "B":
             order = "ULDR"
@@ -281,9 +259,10 @@ def rotate_cube_face(cube, direction):
 
             _rotate_face_slice(cube, order, ss, d)
             cube._cube["B"].rotate
+            cube._rotations.append("B")
 
         else:
-            print("Unknown direction ", direction)
+            pass
 
 
 def _rotate_face_slice(cube, order, slices, accessors):

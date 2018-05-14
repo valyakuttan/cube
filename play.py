@@ -1,8 +1,49 @@
 # play.py
 
 
+from cubies import cubies_affected, rotate_cuby
 from cube import Cube, rotate_cube_face
 from util import SqMatrix
+
+
+def cuby_cycles(op, repeat=1):
+    op_actual = op * repeat
+    affected_cubies, cycles = set(cubies_involved(op)), []
+    c = affected_cubies.pop()
+    cycle = [c]
+
+    while affected_cubies:
+        c = apply_operation_to_cuby(c, op_actual)
+
+        if c in cycle:
+            if len(cycle) > 1:
+                cycles.append(cycle)
+                cycle, c = [], affected_cubies.pop()
+        else:
+            affected_cubies -= {c}
+
+        cycle.append(c)
+
+    if len(cycle) > 1:
+        cycles.append(cycle)
+
+    return cycles
+
+
+def cubies_involved(op):
+    affected = set()
+    for r in op:
+        affected |= set(cubies_affected(r))
+
+    return list(affected)
+
+
+def apply_operation_to_cuby(cuby, op):
+    cby = cuby
+    for r in op:
+        cby = rotate_cuby(cby, r)
+
+    return cby
 
 
 def order_of_face_operation(op):
